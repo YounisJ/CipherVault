@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherVault | Premium Password Suite</title>
+  <meta name="description" content="Generate ultra-secure custom passwords and memorable passphrases with real-time strength analysis, local-first cryptography, and a premium visual dashboard.">
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Background Gradients -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          <circle cx="12" cy="16" r="1.5"></circle>
+        </svg>
+        <h1>Cipher<span>Vault</span></h1>
+      </div>
+      <p class="tagline">Local-first, mathematically secure password & passphrase studio</p>
+      
+      <!-- Main Application Tabs -->
+      <div class="app-tabs">
+        <button id="tab-generator" class="tab-btn active" onclick="switchTab('generator')">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          Generator
+        </button>
+        <button id="tab-tester" class="tab-btn" onclick="switchTab('tester')">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          Strength Analyzer
+        </button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!-- PANEL 1: PASSWORD GENERATOR -->
+      <section id="panel-generator" class="panel-section active">
+        <div class="dashboard-grid">
+          
+          <!-- Column 1: Controls -->
+          <div class="card glass controls-card">
+            <div class="mode-selector">
+              <button id="mode-password" class="mode-btn active" onclick="switchMode('password')">Random Password</button>
+              <button id="mode-passphrase" class="mode-btn" onclick="switchMode('passphrase')">Memorable Passphrase</button>
+            </div>
+
+            <!-- Length Control -->
+            <div class="control-group">
+              <div class="control-header">
+                <label id="length-label-text" for="input-length">Password Length</label>
+                <span id="display-length-val" class="badge">16</span>
+              </div>
+              <div class="slider-wrapper">
+                <input type="range" id="input-length" min="6" max="64" value="16" step="1">
+              </div>
+            </div>
+
+            <!-- RANDOM PASSWORD CONFIG -->
+            <div id="config-password" class="config-section active">
+              <h3>Character Settings</h3>
+              
+              <div class="toggle-list">
+                <label class="toggle-item">
+                  <span class="toggle-label">Uppercase Letters (A-Z)</span>
+                  <input type="checkbox" id="chk-upper" checked>
+                  <span class="toggle-switch"></span>
+                </label>
+                
+                <label class="toggle-item">
+                  <span class="toggle-label">Lowercase Letters (a-z)</span>
+                  <input type="checkbox" id="chk-lower" checked>
+                  <span class="toggle-switch"></span>
+                </label>
+                
+                <label class="toggle-item">
+                  <span class="toggle-label">Numeric Digits (0-9)</span>
+                  <input type="checkbox" id="chk-numbers" checked>
+                  <span class="toggle-switch"></span>
+                </label>
+                
+                <label class="toggle-item">
+                  <span class="toggle-label">Special Symbols (!@#$...)</span>
+                  <input type="checkbox" id="chk-symbols" checked>
+                  <span class="toggle-switch"></span>
+                </label>
+              </div>
+
+              <div class="advanced-divider" onclick="toggleAdvanced()">
+                <span>Advanced Rule Settings</span>
+                <svg id="advanced-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+
+              <!-- Collapsible Advanced Rules -->
+              <div id="advanced-rules" class="advanced-rules-panel">
+                <label class="toggle-item">
+                  <span class="toggle-label">Exclude Similar (i, l, 1, o, 0, etc.)</span>
+                  <input type="checkbox" id="chk-exclude-similar">
+                  <span class="toggle-switch"></span>
+                </label>
+                
+                <div class="input-text-group">
+                  <label for="txt-custom-symbols">Custom Symbols Set</label>
+                  <input type="text" id="txt-custom-symbols" value="!@#$%^&*()_+-=[]{}|;:,.<>?">
+                </div>
+              </div>
+            </div>
+
+            <!-- PASSPHRASE CONFIG (HIDDEN BY DEFAULT) -->
+            <div id="config-passphrase" class="config-section">
+              <h3>Passphrase Settings</h3>
+              
+              <div class="toggle-list">
+                <div class="select-group">
+                  <label for="sel-word-separator">Word Separator</label>
+                  <select id="sel-word-separator">
+                    <option value="-">Hyphen (-)</option>
+                    <option value="_">Underscore (_)</option>
+                    <option value=".">Dot (.)</option>
+                    <option value=" ">Space ( )</option>
+                    <option value="">None (Concat)</option>
+                  </select>
+                </div>
+
+                <div class="select-group">
+                  <label for="sel-capitalization">Capitalization</label>
+                  <select id="sel-capitalization">
+                    <option value="title">Title Case (WordOne-WordTwo)</option>
+                    <option value="lower" selected>lowercase (wordone-wordtwo)</option>
+                    <option value="upper">UPPERCASE (WORDONE-WORDTWO)</option>
+                  </select>
+                </div>
+
+                <label class="toggle-item">
+                  <span class="toggle-label">Append Random Number</span>
+                  <input type="checkbox" id="chk-passphrase-number">
+                  <span class="toggle-switch"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Result & Real-time Analytics -->
+          <div class="right-column-grid">
+            
+            <!-- Result Display Card -->
+            <div class="card glass output-card">
+              <div class="output-wrapper">
+                <div id="password-display" class="password-text">Generating...</div>
+                <div class="output-actions">
+                  <button id="btn-copy" class="btn-action" title="Copy to Clipboard" onclick="copyPassword()">
+                    <svg class="action-icon copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <svg class="action-icon check-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </button>
+                  <button id="btn-regenerate" class="btn-action" title="Regenerate" onclick="generateNewBtn()">
+                    <svg class="action-icon refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Color Code Legends -->
+              <div class="legend-bar" id="legend-bar">
+                <span class="legend-item"><span class="dot uppercase-dot"></span>Uppercase</span>
+                <span class="legend-item"><span class="dot lowercase-dot"></span>Lowercase</span>
+                <span class="legend-item"><span class="dot numbers-dot"></span>Numbers</span>
+                <span class="legend-item"><span class="dot symbols-dot"></span>Symbols</span>
+              </div>
+            </div>
+
+            <!-- Security Assessment Card -->
+            <div class="card glass security-card">
+              <h3>Security Diagnostics</h3>
+              
+              <!-- Strength Progress Meter -->
+              <div class="strength-meter-container">
+                <div class="meter-bar-track">
+                  <div id="strength-meter-bar" class="meter-bar-fill" style="width: 60%"></div>
+                </div>
+                <div class="meter-status">
+                  <span id="strength-label">Strong</span>
+                  <span id="entropy-label">76 Bits of Entropy</span>
+                </div>
+              </div>
+
+              <div class="diagnostics-grid">
+                <div class="diagnostic-tile">
+                  <div class="tile-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </div>
+                  <div class="tile-content">
+                    <span class="tile-title">Time to Crack (Offline)</span>
+                    <span id="crack-time" class="tile-value">~15 Thousand Years</span>
+                  </div>
+                </div>
+
+                <div class="diagnostic-tile">
+                  <div class="tile-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                  </div>
+                  <div class="tile-content">
+                    <span class="tile-title">Online Attack Speed</span>
+                    <span id="online-crack-time" class="tile-value">Centuries</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Password History Drawer/Accordion -->
+        <section class="card glass history-card">
+          <div class="history-header" onclick="toggleHistory()">
+            <div class="history-title-group">
+              <svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 8 12 12 14 14"></polyline>
+                <path d="M12 2a10 10 0 0 0-7.54 3.46L2 8V2"></path>
+              </svg>
+              <h3>Secure Generator History</h3>
+            </div>
+            <div class="history-actions-toggle">
+              <span id="history-count" class="badge">0</span>
+              <svg id="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+          
+          <div id="history-content-panel" class="history-content-panel">
+            <div class="history-tools">
+              <p>Passwords are stored locally in active memory. They disappear when you close or refresh this tab.</p>
+              <button id="btn-clear-history" class="btn-secondary" onclick="clearHistory()">Clear History</button>
+            </div>
+            <ul id="history-list" class="history-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </section>
+      </section>
+
+      <!-- PANEL 2: STRENGTH ANALYZER -->
+      <section id="panel-tester" class="panel-section">
+        <div class="tester-container card glass">
+          <h2>Analyze Password Strength</h2>
+          <p class="subtitle">Type or paste any password below to check its entropy, dictionary vulnerability, and structural safety.</p>
+          
+          <div class="tester-input-wrapper">
+            <input type="password" id="txt-tester-input" placeholder="Type password to evaluate..." oninput="analyzeCustomPassword()">
+            <button id="btn-toggle-test-visibility" class="btn-action" title="Toggle Visibility" onclick="toggleTesterPasswordVisibility()">
+              <svg id="tester-eye-open" class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg id="tester-eye-closed" class="action-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="tester-diagnostics">
+            <!-- Dynamic feedback cards -->
+            <div class="tester-feedback-grid">
+              
+              <div class="feedback-gauge-card card">
+                <h4>Safety Gauge</h4>
+                <div class="circular-progress-container">
+                  <svg class="circular-progress" viewBox="0 0 100 100">
+                    <circle class="circle-bg" cx="50" cy="50" r="40" />
+                    <circle id="tester-progress-circle" class="circle-bar" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+                  </svg>
+                  <div class="circular-progress-text">
+                    <span id="tester-strength-percent">0%</span>
+                    <span id="tester-strength-label">Very Weak</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="feedback-metrics-card card">
+                <h4>Statistical Overview</h4>
+                <ul class="stats-list">
+                  <li>
+                    <span class="label">Entropy Score:</span>
+                    <span id="tester-entropy" class="value text-warning">0 Bits</span>
+                  </li>
+                  <li>
+                    <span class="label">Estimated Crack Time:</span>
+                    <span id="tester-crack-time" class="value text-warning">Instant</span>
+                  </li>
+                  <li>
+                    <span class="label">Total Character Count:</span>
+                    <span id="tester-length" class="value text-neutral">0</span>
+                  </li>
+                </ul>
+                
+                <div class="character-composition">
+                  <h5>Composition Analysis</h5>
+                  <div class="comp-bar-container">
+                    <div id="comp-upper" class="comp-segment bg-upper" style="width: 0%" title="Uppercase"></div>
+                    <div id="comp-lower" class="comp-segment bg-lower" style="width: 0%" title="Lowercase"></div>
+                    <div id="comp-numbers" class="comp-segment bg-numbers" style="width: 0%" title="Numbers"></div>
+                    <div id="comp-symbols" class="comp-segment bg-symbols" style="width: 0%" title="Symbols"></div>
+                  </div>
+                  <div class="comp-legend">
+                    <span><span class="dot uppercase-dot"></span>UC</span>
+                    <span><span class="dot lowercase-dot"></span>LC</span>
+                    <span><span class="dot numbers-dot"></span>NUM</span>
+                    <span><span class="dot symbols-dot"></span>SYM</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Warning and Tips Panel -->
+            <div id="tester-suggestions-card" class="card suggestions-card hidden">
+              <h4>Security Recommendations</h4>
+              <ul id="tester-suggestions-list" class="suggestions-list">
+                <!-- Javascript will load tips here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>&copy; 2026 CipherVault. Zero-knowledge. Cryptographic operations rely on the browser's cryptographically secure random number generator (`window.crypto`).</p>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast">Password copied to clipboard!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
