@@ -3,7 +3,6 @@
 CipherVault is a visually stunning, mathematically secure, local-first single-page application for generating cryptographically secure passwords and memorable passphrases. Built with modern styling (glassmorphism, glowing micro-interactions, dark mode) and zero external dependencies, CipherVault performs all security computations directly in the user's browser for maximum privacy.
 
 ![CipherVault Header](screenshots/generator_random_pass.png)
-
 ---
 
 
