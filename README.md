@@ -7,6 +7,7 @@ CipherVault is a visually stunning, mathematically secure, local-first single-pa
 ---
 
 
+
 ## ✨ Features
 
 - 🎲 **Cryptographically Secure Randomness**: Relies on the browser's native `crypto.getRandomValues()` API (avoiding weak pseudo-random generation).
