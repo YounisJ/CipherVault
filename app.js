@@ -1,5 +1,6 @@
 // CipherVault Application Logic
 
+
 // A curated list of 200 memorable, clean, easy-to-spell English words for Passphrase Mode
 const WORDLIST = [
   "actor", "agent", "amber", "angel", "anvil", "apple", "armor", "arrow", "aspect", "atlas",
